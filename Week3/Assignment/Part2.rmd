@@ -1,0 +1,71 @@
+```{r}
+library(fma)
+library(forecast)
+library(fpp)
+```
+
+```{r}
+fancy
+```
+
+### 2a)
+I don't know if this is in dollars or volume. I am going to assume dollars since there is a decimal value.
+
+1990's Xmas peak was less than 89, but the rest increased YOY. The Xmas season is getting longer (starting earlier) since 1991. If this trend in seasonality increases (meaning if the xmas season keeps starting earlier and earlier each year), wouldn't be surprised if we see a straighter curve from Mar to Dec.
+
+```{r}
+plot(fancy, main="Aussy Trinket Sales", ylab="Sales Dollars", xlab="Sales Years")
+```
+
+### 2b)
+The relationship between Mon/Year and sales seems to be exponential (for Dec/Year espcially).
+
+```{r}
+# take the logarithm of sales dollars for each observation
+fancy_log = log(fancy)
+```
+
+### 2c)
+
+### Add Festival Dummy for each 3rd month of the year, except for the first year (since the festival didn't begin in our first year)
+
+```{r}
+# Create ts object that is mimic of fancy with 0s
+dummy = replace(fancy, 1:length(fancy), 0)
+```
+
+```{r}
+# Update the proper Marchs, I am sure there is a mathematical way to do this, but I am not going to spend time on it
+dummy = replace(dummy, c(15, 27, 39, 51, 63, 75), 1)
+```
+
+```{r}
+# Check on the dummy
+dummy
+```
+
+```{r}
+rm = tslm(fancy_log ~ trend + season + dummy)
+summary(rm)
+```
+
+```{r}
+res = residuals(rm)
+plot(res, main="Residuals of fancy forecast model", ylab="Residual")
+```
+
+```{r}
+```
+
+```{r}
+?ts
+```
+
+```{r}
+?residuals
+```
+
+```{r}
+```
+
+future_dummy = data.frame(dummy = rep(0, 36))

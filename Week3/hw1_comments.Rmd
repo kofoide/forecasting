@@ -1,0 +1,37 @@
+Comments on HW #1
+
+While I am flattered by the dedication that some folks have shown in sticking very closely to the code from class, I would appreciate a little more critical thought.  I show things for the purpose of exposition - I think it's important that you know that there are 3 different versions of the plot command and what they do so you don't get confused.  You should not feel it necessary to use all 3 in your homework unless there is a reason. 
+
+You can (and should) rename variables, change labels on charts, and understand why you need to run a piece of code rather than doing it because we did it in class. 
+
+
+Effect of frequency
+Why were the forecasts for naive and seasonal the same for the ibmclose data?  What are the formulas?  It's not the data themselves but the way they were specified when we loaded them into R. 
+
+Consider this case instead:
+```{r}
+library(fma)
+it <- ts(ibmclose, frequency = 12, start = c(1980,1) )
+start(it)
+end(it)
+it
+plot(it)
+it.train <- window(it, end = c(1980, 300))
+it.test <- window(it, start = c(1980, 301))
+length(it.train)
+length(it.test)
+
+Mean.it<- meanf(it.train, h=length(it.test))
+Naive.it <- naive(it.train, h=length(it.test))
+Seasonal.it <- snaive(it.train, h=length(it.test))
+Drift.it <- rwf(it.train, drift = TRUE, h=length(it.test))
+
+plot(it)
+lines(Mean.it$mean, col = "blue")
+lines(Naive.it$mean, col = "red")
+lines(Seasonal.it$mean, col = "green")
+lines(Drift.it$mean, lty = 2)
+```
+
+Helpful resources for creating time series in R:
+http://stackoverflow.com/questions/29046311/how-to-convert-data-frame-into-time-series-in-r%5D (Thanks Mike R)

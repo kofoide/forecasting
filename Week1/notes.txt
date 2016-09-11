@@ -1,0 +1,3 @@
+Stochastic processes - random, data generating process
+
+Time Series forecasts should have residuals mean of 0
